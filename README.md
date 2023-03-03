@@ -33,7 +33,7 @@ python play.py
 
 
 
-<video src="./video/trained.mp4"></video>
+<video src="video/trained.mp4"></video>
 
 ### Random agent
 
@@ -45,7 +45,7 @@ python play_untrained.py
 
 - Example video
 
-<video src="./video/untrained.mp4"></video>
+<video src="video/untrained.mp4"></video>
 
 ### Comparison and the effect of learning
 
@@ -56,11 +56,11 @@ python play_untrained.py
 
 - Average reward
 
-  <img src="./save/2023-03-03T22-31-48/reward_plot.jpg" alt="reward" style="zoom: 50%;" />
+  <img src="save/2023-03-03T22-31-48/reward_plot.jpg" alt="reward" style="zoom: 50%;" />
 
 - Average duration of an episode (the shorter duration, the greater moving speed)
 
-  <img src="./save/2023-03-03T22-31-48/length_plot.jpg" alt="length" style="zoom:50%;" />
+  <img src="save/2023-03-03T22-31-48/length_plot.jpg" alt="length" style="zoom:50%;" />
 
 ## Policy network details
 

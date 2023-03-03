@@ -29,11 +29,9 @@ Based on [OpenAI Gym](https://www.gymlibrary.dev/).
 python play.py
 ~~~
 
-- Example video
+- [Example video](video/trained.mp4)
 
-
-
-<video src="video/trained.mp4"></video>
+https://user-images.githubusercontent.com/100419654/222812866-7629a5ee-033f-4dc2-8ace-b5de884a9154.mp4
 
 ### Random agent
 
@@ -43,9 +41,9 @@ python play.py
 python play_untrained.py
 ~~~
 
-- Example video
+- [Example video](video/untrained.mp4)
 
-<video src="video/untrained.mp4"></video>
+https://user-images.githubusercontent.com/100419654/222812980-0f4e194a-9ba1-4a68-a0c3-5d0d78495e4d.mp4
 
 ### Comparison and the effect of learning
 

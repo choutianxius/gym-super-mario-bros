@@ -29,7 +29,7 @@ mario = Mario(
 )
 logger = MetricLogger(save_dir)
 
-episodes = 2000
+episodes = 10000
 try:
     for e in range(episodes):
         state = env.reset()

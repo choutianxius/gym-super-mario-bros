@@ -25,11 +25,11 @@ mario = Mario(
     save_dir=save_dir,
     enable_explore=True,
     train=True,
-    memory_len=20000,
+    memory_len=100000,
 )
 logger = MetricLogger(save_dir)
 
-episodes = 10000
+episodes = 50000
 try:
     for e in range(episodes):
         state = env.reset()

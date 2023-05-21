@@ -11,10 +11,10 @@ class Mario:
             self,
             action_dim,
             save_dir="",
-            memory_len=10000,
+            memory_len=100000,
             batch_size=32,
-            exploration_rate_decay=0.999975,
-            exploration_rate_min=0.1,
+            exploration_rate_decay=0.99999975,
+            exploration_rate_min=0.02,
             enable_explore=False,
             model=None,
             train=False,
@@ -47,7 +47,7 @@ class Mario:
         self.curr_step = 0
 
         # Save MarioNet every # experiences gained (steps)
-        self.save_every = memory_len * 10
+        self.save_every = memory_len
 
         self.gamma = .9
         self.optimizer = torch.optim.Adam(
@@ -61,7 +61,7 @@ class Mario:
         # no. of experiences between updates to Q_online
         self.learn_every = 3
         # no. of experiences between Q_target & Q_online sync
-        self.sycn_every = self.learn_every * 50
+        self.sycn_every = memory_len // 10
 
     def act(self, state):
         """

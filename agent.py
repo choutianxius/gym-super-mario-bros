@@ -13,7 +13,7 @@ class Mario:
             save_dir="",
             memory_len=100000,
             batch_size=32,
-            exploration_rate_decay=0.99999975,
+            exploration_rate_decay=0.99995,
             exploration_rate_min=0.02,
             enable_explore=False,
             model=None,

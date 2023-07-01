@@ -1,6 +1,6 @@
 # DDQN Agent for Super Mario Bros
 
-Train a double deep Q neural network (DDQN) agent to play Nintento Super Mario Bros (simulated).
+Train a double deep Q neural network (DDQN) agent to play the Nintento Super Mario Bros game.
 
 Based on [OpenAI Gym](https://www.gymlibrary.dev/).
 
@@ -19,9 +19,7 @@ Based on [OpenAI Gym](https://www.gymlibrary.dev/).
 python play.py
 ~~~
 
-- [Example video](video/trained.mp4)
-
-https://user-images.githubusercontent.com/100419654/222812866-7629a5ee-033f-4dc2-8ace-b5de884a9154.mp4
+[Example Video](https://github.com/choutianxius/gym-super-mario-bros/assets/100419654/f5d3b865-3bec-4482-bef7-c20c51bfdff8)
 
 ### Random Agent
 
@@ -31,35 +29,33 @@ https://user-images.githubusercontent.com/100419654/222812866-7629a5ee-033f-4dc2
 python play_untrained.py
 ~~~
 
-- [Example video](video/untrained.mp4)
-
-https://user-images.githubusercontent.com/100419654/222812980-0f4e194a-9ba1-4a68-a0c3-5d0d78495e4d.mp4
+[Example Video](https://user-images.githubusercontent.com/100419654/222812980-0f4e194a-9ba1-4a68-a0c3-5d0d78495e4d.mp4)
 
 ### Metrics
 
 - Average Reward During Training
 
-  <img src="readme_images/reward_plot.jpg" alt="reward" style="zoom: 50%;" />
+  <img src="readme_images/reward_plot.jpg" alt="reward" width="500" />
 
 - Average Loss During Training
 
-  <img src="readme_images/loss_plot.jpg" alt="loss" style="zoom: 50%;" />
+  <img src="readme_images/loss_plot.jpg" alt="loss" width="500" />
 
 - Expected Q Value During Training
 
-  <img src="readme_images/q_plot.jpg" alt="loss" style="zoom: 50%;" />
+  <img src="readme_images/q_plot.jpg" alt="loss" width="500" />
 
 - Average Duration of an Episode During Training
 
-  <img src="readme_images/length_plot.jpg" alt="length" style="zoom:50%;" />
+  <img src="readme_images/length_plot.jpg" alt="length" width="500" />
 
 - Clear Times in 100 Episodes
 
-  <img src="readme_images/clear_times.png" alt="length" style="zoom:25%;" />
+  <img src="readme_images/clear_times.png" alt="clear times" width="500" />
 
 - Mean Score in 100 Episodes
 
-  <img src="readme_images/mean_scores.png" alt="length" style="zoom:25%;" />
+  <img src="readme_images/mean_scores.png" alt="mean score" width="500" />
 
 ## Training Details
 
@@ -73,30 +69,48 @@ Following the [2015 DeepMind DQN paper](https://doi.org/10.1038/nature14236)
 4. (dense + relu) * 2
 5. output: x float (x is the dimension of the action-space)
 
-<img src="readme_images/convnet_fig.png" alt="length" />
+<img src="readme_images/convnet_fig.png" alt="nn" width="500" />
 
 ### Algorithm: Double Deep Q Learning
 
-$$
-s = state, ~ s' = next ~ state\\
-a = action, ~ a' = next ~ action\\
-r = reward\\
-\gamma = discount ~ factor\\
-input = (s, a)\\
-a' = argmax_{a} (Q_{online}(s', a))\\
-target = r + \gamma \times Q_{target}(s', a')
-$$
+Play and Memorize
 
-- Train the model with *input* and *target*
-- Optimizer is Adam optimizer
-- Loss function is Huber loss (`SmoothL1Loss`)
-- Sample from a **replay memory** to get **mini-batches**
-- Synchronize $Q_{target}$ with $Q_{online}$ every $C$ steps
-- **$\epsilon$-greedy** with a exponentially decaying $\epsilon$ (during training)
+$$ s = state $$
+
+$$ a_{predict} = action = argmax_{a1}(Q_{online}(s, a1)) $$
+
+$$ a = a_{predict} ~ for ~ 1 - \epsilon ~ probability ~ else ~ a = random ~ action $$
+
+$$ s', r, ... = environment(a) ~ where ~ r = reward $$
+
+$$ save ~ in ~ memory ~ : ~ (s, a, s', r) $$
+
+Learn
+
+$$ Sample ~ from ~ memory ~ : ~ minibatch $$
+
+$$ a' = argmax_{a} (Q_{online}(s', a)) $$
+
+$$ Q_{target} = r + \gamma \times Q_{target}(s', a') $$
+
+$$ Q_{estimate} = Q_{online}(s, a) $$
+
+$$ Perform ~ backpropagation $$
+
+- Play and memorize for every step
+- Learn every $C_{1}$ steps
+- Synchronize $Q_{target}$ with $Q_{online}$ every $C_{2}$ steps
+- **$\epsilon$-greedy** with an exponentially decaying $\epsilon$ (during training)
 
 #### Training Details
 
+- Optimizer is Adam optimizer
+- Loss function is Huber loss (`SmoothL1Loss`)
+- Learning rate is 0.00025
 - $\gamma$ = 0.9
+- Length of $memory$ is 100000
+- $C_{1}$ = 3
+- $C_{2}$ = 10000
 - $\epsilon$ exponentially degrades from 1 to 0.02, with degradation factor being 0.99995
 - Trained for 50000 episodes
 - Trained with 1 Nvidia RTX 4090 graphic card with 24 GB VRAM for about 48 hours

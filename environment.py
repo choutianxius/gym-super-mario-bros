@@ -1,15 +1,28 @@
+"""
+Returns a wrapped gym environment
+that is ready to train the agent / play the game;
+applies frame-skipping, grayscaling, resizing
+and stacking to the original gym_super_mario_bros env
+"""
+
 import gym
 from nes_py.wrappers import JoypadSpace
 import gym_super_mario_bros
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 
-from wrappers import SkipFrame, GrayScaleObservation, ResizeObservation, FrameStack
+from wrappers import (
+    SkipFrame,
+    GrayScaleObservation,
+    ResizeObservation,
+    FrameStack,
+)
 
 
-def base_env(mode, stage = 1):
+def base_env(mode, stage=1, world=1):
     # gym version compatibility
     if gym.__version__ < '0.26':
-        env = gym_super_mario_bros.make(f'SuperMarioBros-1-{stage}-v0', new_step_api=True)
+        env = gym_super_mario_bros.make(
+            f'SuperMarioBros-{world}-{stage}-v0', new_step_api=True)
     else:
         env = gym_super_mario_bros.make(
             f'SuperMarioBros-1-{stage}-v0',
@@ -25,8 +38,8 @@ def base_env(mode, stage = 1):
     return env
 
 
-def wrapped(mode, stage = 1):
-    env = base_env(mode, stage)
+def wrapped(mode, stage=1, world=1):
+    env = base_env(mode, stage, world)
     env = SkipFrame(env, skip=4)
     env = GrayScaleObservation(env)
     env = ResizeObservation(env, shape=84)
@@ -35,4 +48,3 @@ def wrapped(mode, stage = 1):
     else:
         env = FrameStack(env, num_stack=4)
     return env
-

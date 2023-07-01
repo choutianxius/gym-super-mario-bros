@@ -1,12 +1,17 @@
+"""
+Play with an untrained agent (always chooses a random action)
+"""
+
 import environment
 from gym.wrappers.monitoring.video_recorder import VideoRecorder
 
+record = True  # whether save the playing process into a video
+stage = 1  # game level
+world = 1  # game level
 
-record = True
 mode = 'single_rgb_array' if record else 'human'
-stage = 2
 
-env = environment.base_env(mode, stage)
+env = environment.base_env(mode, stage, world)
 
 if record:
     recorder = VideoRecorder(

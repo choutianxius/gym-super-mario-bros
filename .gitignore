@@ -4,3 +4,12 @@ __pycache__/
 
 /video
 /save
+
+/dissect_images
+
+/*.png
+/*.npy
+/*.jpg
+playground.py
+
+.flake8

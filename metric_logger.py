@@ -1,3 +1,8 @@
+"""
+Logger for the training metrics
+"""
+
+
 import numpy as np
 import datetime, time
 from matplotlib import pyplot as plt
@@ -85,7 +90,10 @@ class MetricLogger:
 
         last_record_time = self.record_time
         self.record_time = time.time()
-        time_since_last_record = np.round(self.record_time - last_record_time, 3)
+        time_since_last_record = np.round(
+            self.record_time - last_record_time,
+            3,
+        )
 
         print(
             f"Episode {episode} - "
@@ -102,12 +110,19 @@ class MetricLogger:
         with open(self.save_log, "a") as f:
             f.write(
                 f"{episode:8d}{step:8d}{epsilon:10.3f}"
-                f"{mean_ep_reward:15.3f}{mean_ep_length:15.3f}{mean_ep_loss:15.3f}{mean_ep_q:15.3f}"
+                f"{mean_ep_reward:15.3f}{mean_ep_length:15.3f}"
+                f"{mean_ep_loss:15.3f}{mean_ep_q:15.3f}"
                 f"{time_since_last_record:15.3f}"
-                f"{datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'):>20}\n"
+                f"{datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'):>20}"
+                "\n"
             )
 
-        for metric in ["ep_rewards", "ep_lengths", "ep_avg_losses", "ep_avg_qs"]:
+        for metric in [
+            "ep_rewards",
+            "ep_lengths",
+            "ep_avg_losses",
+            "ep_avg_qs",
+        ]:
             plt.plot(getattr(self, f"moving_avg_{metric}"))
             plt.savefig(getattr(self, f"{metric}_plot"))
             plt.clf()

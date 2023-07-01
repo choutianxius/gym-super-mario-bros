@@ -1,3 +1,7 @@
+"""
+The Super Mario Bros agent that plays the game.
+"""
+
 import torch, random, copy
 import numpy as np
 from collections import deque
@@ -18,7 +22,7 @@ class Mario:
             enable_explore=False,
             model=None,
             train=False,
-        ):
+    ):
         self.action_dim = action_dim
         self.save_dir = save_dir
 
@@ -27,14 +31,14 @@ class Mario:
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.online_model = MarioNet(self.action_dim).float()\
-                            if model is None\
-                            else copy.deepcopy(model)
+            if model is None\
+            else copy.deepcopy(model)
         self.online_model = self.online_model.to(device=self.device)
 
         self.train = train
         self.target_model = copy.deepcopy(self.online_model)\
-                            if self.train\
-                            else None
+            if self.train\
+            else None
         if self.target_model:
             for p in self.target_model.parameters():
                 p.requires_grad = False
@@ -70,8 +74,8 @@ class Mario:
         With a probability of (1 - epsilon), exploit (optimal action)
         """
         epsilon = self.exploration_rate\
-                  if self.train\
-                  else self.exploration_rate_min
+            if self.train\
+            else self.exploration_rate_min
         # explore
         if self.enable_explore and (np.random.rand() < epsilon):
             action_idx = np.random.randint(self.action_dim)
@@ -80,6 +84,8 @@ class Mario:
         else:
             # Calculate Q(s, a) for every a
             # return argmax_a(Q(s, a))
+
+            # !!! state[0] is wrong?
             state = state[0].__array__()\
                     if isinstance(state, tuple)\
                     else state.__array__()
@@ -185,9 +191,9 @@ class Mario:
     def save(self):
         """Save model params and hyperparams to reuse"""
         save_path = (
-            self.save_dir / "mario_net_"\
-                f"{int(self.curr_step // self.save_every)}"\
-                ".chkpt"
+            self.save_dir / "mario_net_"
+            f"{int(self.curr_step // self.save_every)}"
+            ".chkpt"
         )
         torch.save(
             dict(

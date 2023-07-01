@@ -1,7 +1,9 @@
+"""
+Wrappers to make our environment
+"""
+
 import gym
-from nes_py.wrappers import JoypadSpace
 from gym.spaces import Box
-from gym.wrappers import FrameStack
 
 import torch
 import numpy as np
@@ -47,6 +49,7 @@ class GrayScaleObservation(gym.ObservationWrapper):
 
     def permute_orientation(self, observation):
         # permute [H, W, C] array to [C, H, W] tensor
+        # H is height, W is width, C is channels
         observation = np.transpose(observation, (2, 0, 1))
         observation = torch.tensor(
             observation.copy(),

@@ -7,23 +7,13 @@ Based on [OpenAI Gym](https://www.gymlibrary.dev/).
 ## Requirements
 
 - Python==3.9.13 (Python 3.9.x should be fine)
+- gym==0.25.2 (It is not the latest version to keep compatible with gym-super-mario-bros)
+- gym-super-mario-bros==7.4.0
+- Pytorch needs manual configuration. See its [website](https://pytorch.org/get-started/locally/)
 
-- site-packages
+## Let the Agent Play!
 
-  ~~~shell
-  pip install -r requirements.txt
-  ~~~
-
-  Pytorch needs manual configuration. See its [website](https://pytorch.org/get-started/locally/)
-
-## Let the agent play!
-
-### Trained agent 
-
-- Trained with 2000 episodes
-- 90% chance to follow the trained policy
-- 10% chance to act randomly
-- need improvement
+### Trained Agent
 
 ~~~shell
 python play.py
@@ -33,7 +23,7 @@ python play.py
 
 https://user-images.githubusercontent.com/100419654/222812866-7629a5ee-033f-4dc2-8ace-b5de884a9154.mp4
 
-### Random agent
+### Random Agent
 
 - Pick a random action to proceed
 
@@ -45,34 +35,47 @@ python play_untrained.py
 
 https://user-images.githubusercontent.com/100419654/222812980-0f4e194a-9ba1-4a68-a0c3-5d0d78495e4d.mp4
 
-### Comparison and the effect of learning
+### Metrics
 
-- The trained agent has learned (to some extent) to jump over the first 3 pipes and the first ditch
-- The trained agent moves faster (and gains greater reward from the simulated environment, see [this](https://github.com/Kautenja/gym-super-mario-bros#reward-function))
+- Average Reward During Training
 
-### Metrics of the trained agent
+  <img src="readme_images/reward_plot.jpg" alt="reward" style="zoom: 50%;" />
 
-- Average reward
+- Average Loss During Training
 
-  <img src="save/2023-03-03T22-31-48/reward_plot.jpg" alt="reward" style="zoom: 50%;" />
+  <img src="readme_images/loss_plot.jpg" alt="loss" style="zoom: 50%;" />
 
-- Average duration of an episode (the shorter duration, the greater moving speed)
+- Expected Q Value During Training
 
-  <img src="save/2023-03-03T22-31-48/length_plot.jpg" alt="length" style="zoom:50%;" />
+  <img src="readme_images/q_plot.jpg" alt="loss" style="zoom: 50%;" />
 
-## Policy network details
+- Average Duration of an Episode During Training
 
-### Structure: a mini CNN
+  <img src="readme_images/length_plot.jpg" alt="length" style="zoom:50%;" />
 
-1. Input: 4 × 84 × 84 float (transformed rgb representation of the screen: grayscale, resize and stack)
+- Clear Times in 100 Episodes
+
+  <img src="readme_images/clear_times.png" alt="length" style="zoom:25%;" />
+
+- Mean Score in 100 Episodes
+
+  <img src="readme_images/mean_scores.png" alt="length" style="zoom:25%;" />
+
+## Training Details
+
+### Policy Network Structure
+
+Following the [2015 DeepMind DQN paper](https://doi.org/10.1038/nature14236)
+
+1. Input: 4 × 84 × 84 float (transformed rgb representation of the screen: grayscale, resize and stack every 4 frames)
 2. (conv2d + relu) * 3
 3. flatten
 4. (dense + relu) * 2
 5. output: x float (x is the dimension of the action-space)
 
-### Algorithm: double deep Q learning
+<img src="readme_images/convnet_fig.png" alt="length" />
 
-- Values
+### Algorithm: Double Deep Q Learning
 
 $$
 s = state, ~ s' = next ~ state\\
@@ -86,13 +89,14 @@ $$
 
 - Train the model with *input* and *target*
 - Optimizer is Adam optimizer
-- Loss function is Huber loss (SmoothL1Loss)
+- Loss function is Huber loss (`SmoothL1Loss`)
 - Sample from a **replay memory** to get **mini-batches**
-- Synchronize Q_target with Q_online every C steps (variant of **soft update**?)
-- **epsilon-greedy** with a exponentially decaying epsilon (during training)
+- Synchronize $Q_{target}$ with $Q_{online}$ every $C$ steps
+- **$\epsilon$-greedy** with a exponentially decaying $\epsilon$ (during training)
 
-### Limitations of the agent
+#### Training Details
 
-- My local machine has a limited GPU memory. As a result, the replay buffer size and the number training episodes are limited.
-- May use a **combined** replay memory ([A Deeper Look at Experience Replay](https://arxiv.org/abs/1712.01275))
-
+- $\gamma$ = 0.9
+- $\epsilon$ exponentially degrades from 1 to 0.02, with degradation factor being 0.99995
+- Trained for 50000 episodes
+- Trained with 1 Nvidia RTX 4090 graphic card with 24 GB VRAM for about 48 hours

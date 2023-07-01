@@ -1,4 +1,9 @@
+"""
+CNN for the policy network
+"""
+
 from torch import nn
+
 
 # neural network
 class MarioNet(nn.Module):

@@ -1,3 +1,7 @@
+"""
+Train the agent
+"""
+
 import torch
 from pathlib import Path
 import datetime

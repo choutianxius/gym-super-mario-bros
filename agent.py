@@ -65,7 +65,7 @@ class Mario:
         # no. of experiences between updates to Q_online
         self.learn_every = 3
         # no. of experiences between Q_target & Q_online sync
-        self.sycn_every = memory_len // 10
+        self.sync_every = memory_len // 10
 
     def act(self, state):
         """
@@ -210,7 +210,7 @@ class Mario:
         Update online action-value (Q) function with a batch of experiences.
         Use double DQN algorithm.
         """
-        if self.curr_step % self.sycn_every == 0:
+        if self.curr_step % self.sync_every == 0:
             self.sync_Q_target()
 
         if self.curr_step % self.save_every == 0:

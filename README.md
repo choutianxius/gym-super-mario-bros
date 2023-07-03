@@ -15,6 +15,22 @@ Based on [OpenAI Gym](https://www.gymlibrary.dev/).
 
 ### Trained Agent
 
+First, download resources from this [link](https://drive.google.com/uc?id=1LBHXpqs3glKa1VBQoRv5dKpwJlf_PbJm&export=download) and and extract the trained weights file. The weights file is named `mario_net_86.chkpt`. Then, modify the path of the weights file in `play.py`.
+
+~~~python
+# ...
+
+# Load model
+save_path = f'save/2023-05-21T07-54-29/mario_net_{86}.chkpt'  # modify this to your own path
+data = torch.load(save_path)
+state_dict = data.get('online_model')
+output_dim = data.get('output_dim')
+
+# ...
+~~~
+
+Play by running
+
 ~~~shell
 python play.py
 ~~~
@@ -114,3 +130,7 @@ $$ Perform ~ backpropagation $$
 - $\epsilon$ exponentially degrades from 1 to 0.02, with degradation factor being 0.99995
 - Trained for 50000 episodes
 - Trained with 1 Nvidia RTX 4090 graphic card with 24 GB VRAM for about 48 hours
+
+## Train the Agent by Yourself
+
+Check `train.py`. Trained weights will be saved in the `./save/` folder.

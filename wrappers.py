@@ -4,6 +4,7 @@ Wrappers to make our environment
 
 import gym
 from gym.spaces import Box
+from gym.wrappers import FrameStack
 
 import torch
 import numpy as np
